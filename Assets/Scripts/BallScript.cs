@@ -36,6 +36,10 @@ public class BallScript : MonoBehaviour
             rb.velocity = Vector2.zero;
             inPlay = false;
         }
+        if(other.CompareTag("NoCollisionBrick"))
+        {
+            Destroy(other.gameObject);
+        }
     }
     void OnCollisionEnter2D(Collision2D other)
     {

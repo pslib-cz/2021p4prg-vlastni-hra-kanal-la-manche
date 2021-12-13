@@ -6,6 +6,7 @@ TagManager:
   tags:
   - bottom
   - brick
+  - NoCollisionBrick
   layers:
   - Default
   - TransparentFX
