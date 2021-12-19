@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6844233593512938297}
   - component: {fileID: 8868371227846470867}
   - component: {fileID: 2791484630706009110}
+  - component: {fileID: -2968714744797643254}
+  - component: {fileID: -6713626942003596910}
   m_Layer: 0
   m_Name: BrickYellow
   m_TagString: brick
@@ -111,3 +113,36 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.5190935, y: 6.6475916}
   m_EdgeRadius: 0
+--- !u!95 &-2968714744797643254
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3271435260520811495}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7923f8c73ef70154fb4e7cf93c4cf6fc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-6713626942003596910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3271435260520811495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0b16e5e048b9a449f5ed7466ab1ca0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: 2

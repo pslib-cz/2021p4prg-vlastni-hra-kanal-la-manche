@@ -8,6 +8,7 @@ public class BallScript : MonoBehaviour
     public bool inPlay;
     public Transform platform;
     public int speed;
+    public GameManagerScript gm;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,10 @@ public class BallScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gm.gameOver == true)
+        {
+            return;
+        }
         if(inPlay == false)
         {
             transform.position = platform.position;
@@ -35,17 +40,25 @@ public class BallScript : MonoBehaviour
             Debug.Log("Ball hit the bottom");
             rb.velocity = Vector2.zero;
             inPlay = false;
+            gm.UpdateLives(-1);
         }
-        if(other.CompareTag("NoCollisionBrick"))
+        if (other.transform.CompareTag("NoCollisionBrick"))
         {
-            Destroy(other.gameObject);
+            gm.UpdateScore(other.gameObject.GetComponent<GlassScript>().points);
+            gm.UpdateNumberOfBricks();
         }
     }
     void OnCollisionEnter2D(Collision2D other)
     {
         if(other.transform.CompareTag("brick"))
         {
-            Destroy(other.gameObject);
+            gm.UpdateScore(other.gameObject.GetComponent<YellowScript>().points);
+            gm.UpdateNumberOfBricks();
+        }
+        if(other.transform.CompareTag("redBrick"))
+        {
+            gm.UpdateScore(other.gameObject.GetComponent<RedScript>().points);
+            gm.UpdateNumberOfBricks();
         }
     }
 }
