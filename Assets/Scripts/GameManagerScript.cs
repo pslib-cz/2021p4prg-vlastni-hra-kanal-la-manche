@@ -10,13 +10,21 @@ public class GameManagerScript : MonoBehaviour
     public int score;
     public Text livesText;
     public Text scoreText;
+    public Text highScoreText;
+    public Text differenceText;
+    public InputField highScoreInput;
     public bool gameOver;
+    public bool newLevel;
     public GameObject gameOverPanel;
+    public GameObject newLevelPanel;
     public int numberOfBricks;
+    public Transform[] levels;
+    public int currentLevelIndex;
 
     // Start is called before the first frame update
     void Start()
     {
+        currentLevelIndex = 0;
         livesText.text = "Lives: " + lives;
         scoreText.text = "Score: " + score;
         numberOfBricks = GetAllBricks();
@@ -25,7 +33,7 @@ public class GameManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    
+        UpdateNumberOfBricks();
     }
 
     public void UpdateLives(int changeInLives)
@@ -54,18 +62,62 @@ public class GameManagerScript : MonoBehaviour
 
         return helper;
     }
-    public void UpdateNumberOfBricks()
+    private void UpdateNumberOfBricks()
     {
-        numberOfBricks--;
+        numberOfBricks = GetAllBricks();        
+    }
+    public void CheckLevel()
+    {
         if (numberOfBricks <= 0)
         {
-            GameOver();
+            if (currentLevelIndex >= levels.Length - 1)
+            {
+                GameOver();   
+            }
+            else
+            {
+                gameOver = true;
+                newLevelPanel.SetActive(true);
+                newLevelPanel.GetComponentInChildren<Text>().text = "Level " + (currentLevelIndex + 2);
+                StartCoroutine(LoadLevelDelayed());
+            }
         }
+        Debug.Log(numberOfBricks);
+    }
+
+    private void LoadLevel()
+    {
+        currentLevelIndex++;
+        Instantiate(levels[currentLevelIndex], Vector2.zero, Quaternion.identity);
+        numberOfBricks = GetAllBricks();
+        gameOver = false;
+        newLevelPanel.SetActive(false);
     }
 
     public void GameOver(){
         gameOver = true;
         gameOverPanel.SetActive(true);
+        int highScore = PlayerPrefs.GetInt("HIGHSCORE");
+        if (score > highScore)
+        {
+            PlayerPrefs.SetInt("HIGHSCORE", score);
+            highScoreText.text = "New High Score! " + score;
+            differenceText.text = "Enter your name below";
+            highScoreInput.gameObject.SetActive(true);
+        }
+        else
+        {
+            highScoreText.text = PlayerPrefs.GetString("HIGHSCORENAME") + "'s High Score is " + highScore;
+            differenceText.text = "You needed just " + CalculateScoreDif(highScore) + " points to beat it!";
+        }
+    }
+    public void NewHighScore()
+    {
+        string highScoreName = highScoreInput.text;
+        PlayerPrefs.SetString("HIGHSCORENAME", highScoreName);
+        highScoreInput.gameObject.SetActive(false);
+        highScoreText.text = "New High Score! " + score;
+        differenceText.text = "Congratulations " + highScoreName;
     }
     public void PlayAgain()
     {
@@ -75,5 +127,17 @@ public class GameManagerScript : MonoBehaviour
     {
         Application.Quit();
         Debug.Log("Game Quit");
+    }
+    IEnumerator LoadLevelDelayed()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(2);
+
+        LoadLevel();
+    }
+    private int CalculateScoreDif(int highscore)
+    {
+        int dif = highscore - score;
+        return dif;
     }
 }

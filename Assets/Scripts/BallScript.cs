@@ -21,6 +21,9 @@ public class BallScript : MonoBehaviour
     {
         if (gm.gameOver == true)
         {
+            rb.velocity = Vector2.zero;
+            transform.position = platform.position;
+            inPlay = false;
             return;
         }
         if(inPlay == false)
@@ -31,6 +34,7 @@ public class BallScript : MonoBehaviour
         {
             inPlay = true;
             rb.AddForce(Vector2.up * speed);
+            Debug.Log("spacebar");
         }
     }
 
@@ -45,7 +49,7 @@ public class BallScript : MonoBehaviour
         if (other.transform.CompareTag("NoCollisionBrick"))
         {
             gm.UpdateScore(other.gameObject.GetComponent<GlassScript>().points);
-            gm.UpdateNumberOfBricks();
+            StartCoroutine(CheckLevelDelayed());
         }
     }
     void OnCollisionEnter2D(Collision2D other)
@@ -53,12 +57,19 @@ public class BallScript : MonoBehaviour
         if(other.transform.CompareTag("brick"))
         {
             gm.UpdateScore(other.gameObject.GetComponent<YellowScript>().points);
-            gm.UpdateNumberOfBricks();
+            StartCoroutine(CheckLevelDelayed());
         }
         if(other.transform.CompareTag("redBrick"))
         {
             gm.UpdateScore(other.gameObject.GetComponent<RedScript>().points);
-            gm.UpdateNumberOfBricks();
+            StartCoroutine(CheckLevelDelayed());
         }
+    }
+    IEnumerator CheckLevelDelayed()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(1);
+
+        gm.CheckLevel();
     }
 }
