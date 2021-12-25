@@ -12,6 +12,7 @@ public class GameManagerScript : MonoBehaviour
     public Text scoreText;
     public Text highScoreText;
     public Text differenceText;
+    public Text gameOverText;
     public InputField highScoreInput;
     public bool gameOver;
     public bool newLevel;
@@ -21,9 +22,13 @@ public class GameManagerScript : MonoBehaviour
     public Transform[] levels;
     public int currentLevelIndex;
 
+    public int ballSpeed;
+    public int scoreMultiplier;
+
     // Start is called before the first frame update
     void Start()
     {
+        DifficultySettings();
         currentLevelIndex = 0;
         livesText.text = "Lives: " + lives;
         scoreText.text = "Score: " + score;
@@ -43,6 +48,8 @@ public class GameManagerScript : MonoBehaviour
         if (lives <= 0)
         {
             lives = 0;
+            gameOverText.text = "Game Over";
+            gameOverText.color = new Color32(255, 0, 0, 255);
             GameOver();
         }
 
@@ -72,6 +79,8 @@ public class GameManagerScript : MonoBehaviour
         {
             if (currentLevelIndex >= levels.Length - 1)
             {
+                gameOverText.text = "The End";
+                gameOverText.color = new Color32(0, 255, 0, 255);
                 GameOver();   
             }
             else
@@ -94,39 +103,74 @@ public class GameManagerScript : MonoBehaviour
         newLevelPanel.SetActive(false);
     }
 
-    public void GameOver(){
+    public void GameOver()
+    {
         gameOver = true;
         gameOverPanel.SetActive(true);
-        int highScore = PlayerPrefs.GetInt("HIGHSCORE");
-        if (score > highScore)
+        
+        if (PlayerPrefs.GetInt("COOP") == 1)
         {
-            PlayerPrefs.SetInt("HIGHSCORE", score);
-            highScoreText.text = "New High Score! " + score;
-            differenceText.text = "Enter your name below";
-            highScoreInput.gameObject.SetActive(true);
+            int highScore = PlayerPrefs.GetInt("HIGHSCORECOOP");
+            if (score > highScore)
+            {
+                PlayerPrefs.SetInt("HIGHSCORECOOP", score);
+                highScoreText.text = "New Co-op High Score! " + score;
+                differenceText.text = "Enter your name below";
+                highScoreInput.gameObject.SetActive(true);
+            }
+            else
+            {
+                highScoreText.text = PlayerPrefs.GetString("HIGHSCORECOOPNAME") + "'s High Score is " + highScore;
+                differenceText.text = "You needed just " + CalculateScoreDif(highScore) + " points to beat it!";
+            }
         }
         else
         {
-            highScoreText.text = PlayerPrefs.GetString("HIGHSCORENAME") + "'s High Score is " + highScore;
-            differenceText.text = "You needed just " + CalculateScoreDif(highScore) + " points to beat it!";
+            int highScore = PlayerPrefs.GetInt("HIGHSCORE");
+            if (score > highScore)
+            {
+                PlayerPrefs.SetInt("HIGHSCORE", score);
+                highScoreText.text = "New High Score! " + score;
+                differenceText.text = "Enter your name below";
+                highScoreInput.gameObject.SetActive(true);
+            }
+            else
+            {
+                highScoreText.text = PlayerPrefs.GetString("HIGHSCORENAME") + "'s High Score is " + highScore;
+                differenceText.text = "You needed just " + CalculateScoreDif(highScore) + " points to beat it!";
+            }
         }
     }
     public void NewHighScore()
     {
-        string highScoreName = highScoreInput.text;
-        PlayerPrefs.SetString("HIGHSCORENAME", highScoreName);
-        highScoreInput.gameObject.SetActive(false);
-        highScoreText.text = "New High Score! " + score;
-        differenceText.text = "Congratulations " + highScoreName;
+        if (PlayerPrefs.GetInt("COOP") == 1)
+        {
+           string highScoreName = highScoreInput.text;
+            PlayerPrefs.SetString("HIGHSCORECOOPNAME", highScoreName);
+            highScoreInput.gameObject.SetActive(false);
+            highScoreText.text = "New Co-op High Score! " + score;
+            differenceText.text = "Congratulations " + highScoreName; 
+        }
+        else
+        {
+            string highScoreName = highScoreInput.text;
+            PlayerPrefs.SetString("HIGHSCORENAME", highScoreName);
+            highScoreInput.gameObject.SetActive(false);
+            highScoreText.text = "New High Score! " + score;
+            differenceText.text = "Congratulations " + highScoreName;
+        }
     }
     public void PlayAgain()
     {
         SceneManager.LoadScene("SampleScene");
     }
+    public void PlayAgainCoop()
+    {
+        SceneManager.LoadScene("CoopScene");
+    }
     public void Quit()
     {
-        Application.Quit();
-        Debug.Log("Game Quit");
+        SceneManager.LoadScene("StartMenu");
     }
     IEnumerator LoadLevelDelayed()
     {
@@ -139,5 +183,27 @@ public class GameManagerScript : MonoBehaviour
     {
         int dif = highscore - score;
         return dif;
+    }
+    private void DifficultySettings()
+    {
+        int difficulty = PlayerPrefs.GetInt("DIFFICULTY");
+        switch (difficulty)
+        {
+            case 1:
+                lives = 9;
+                ballSpeed = 700;
+                scoreMultiplier = difficulty;
+                break;
+            case 2:
+                lives = 6;
+                ballSpeed = 750;
+                scoreMultiplier = difficulty;
+                break;
+            case 3:
+                lives = 3;
+                ballSpeed = 1000;
+                scoreMultiplier = difficulty;
+                break;
+        }
     }
 }

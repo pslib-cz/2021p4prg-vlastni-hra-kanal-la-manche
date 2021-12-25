@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformScript : MonoBehaviour
+public class SecondPlatformScript : MonoBehaviour
 {
     public float speed;
     public float rightEdge;
@@ -22,7 +22,7 @@ public class PlatformScript : MonoBehaviour
         {
             return;
         }
-        float horizontal = Input.GetAxis("Horizontal");
+        float horizontal = Input.GetAxis("HorizontalCoop");
 
         transform.Translate(Vector2.right * horizontal * Time.deltaTime * speed);
         if(transform.position.x < leftEdge)

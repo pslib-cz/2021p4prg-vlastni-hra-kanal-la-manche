@@ -8,6 +8,9 @@ TagManager:
   - brick
   - NoCollisionBrick
   - redBrick
+  - extraLife
+  - extraScore
+  - blackBrick
   layers:
   - Default
   - TransparentFX
