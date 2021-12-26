@@ -100,6 +100,18 @@ public class GameManagerScript : MonoBehaviour
         {
             Destroy(item);
         }
+        foreach (var item in GameObject.FindGameObjectsWithTag("NoCollisionBrick"))
+        {
+            Destroy(item);
+        }
+        foreach (var item in GameObject.FindGameObjectsWithTag("brick"))
+        {
+            Destroy(item);
+        }
+        foreach (var item in GameObject.FindGameObjectsWithTag("redBrick"))
+        {
+            Destroy(item);
+        }
         currentLevelIndex++;
         Instantiate(levels[currentLevelIndex], Vector2.zero, Quaternion.identity);
         numberOfBricks = GetAllBricks();
