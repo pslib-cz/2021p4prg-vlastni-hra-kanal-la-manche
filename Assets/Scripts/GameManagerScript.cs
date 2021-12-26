@@ -96,6 +96,10 @@ public class GameManagerScript : MonoBehaviour
 
     private void LoadLevel()
     {
+        foreach (var item in GameObject.FindGameObjectsWithTag("blackBrick"))
+        {
+            Destroy(item);
+        }
         currentLevelIndex++;
         Instantiate(levels[currentLevelIndex], Vector2.zero, Quaternion.identity);
         numberOfBricks = GetAllBricks();
