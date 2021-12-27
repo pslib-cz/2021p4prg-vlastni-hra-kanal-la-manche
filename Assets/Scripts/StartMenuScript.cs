@@ -69,22 +69,45 @@ public class StartMenuScript : MonoBehaviour
     public void CoopPlayer()
     {
         PlayerPrefs.SetInt("COOP", 1);
-        PlayerPrefs.SetInt("DIFFICULTY", 3);
-        SceneManager.LoadScene("CoopScene");
+        playersPanel.SetActive(false);
+        difficultyPanel.SetActive(true);
+        //PlayerPrefs.SetInt("DIFFICULTY", 3);
+        //SceneManager.LoadScene("CoopScene");
     }
     public void Easy()
     {
         PlayerPrefs.SetInt("DIFFICULTY", 1);
-        SceneManager.LoadScene("SampleScene");
+        if (PlayerPrefs.GetInt("COOP") == 1)
+        {
+            SceneManager.LoadScene("CoopScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
     public void Normal()
     {
         PlayerPrefs.SetInt("DIFFICULTY", 2);
-        SceneManager.LoadScene("SampleScene");
+        if (PlayerPrefs.GetInt("COOP") == 1)
+        {
+            SceneManager.LoadScene("CoopScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
     public void Hard()
     {
         PlayerPrefs.SetInt("DIFFICULTY", 3);
-        SceneManager.LoadScene("SampleScene");
+        if (PlayerPrefs.GetInt("COOP") == 1)
+        {
+            SceneManager.LoadScene("CoopScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
     }
 }
