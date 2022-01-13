@@ -112,7 +112,10 @@ public class GameManagerScript : MonoBehaviour
         {
             Destroy(item);
         }
-        currentLevelIndex++;
+        
+        currentLevelIndex = currentLevelIndex + 1;
+        
+        
         Instantiate(levels[currentLevelIndex], Vector2.zero, Quaternion.identity);
         numberOfBricks = GetAllBricks();
         gameOver = false;
@@ -191,7 +194,7 @@ public class GameManagerScript : MonoBehaviour
     IEnumerator LoadLevelDelayed()
     {
         //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSecondsRealtime(2);
 
         LoadLevel();
     }

@@ -87,7 +87,7 @@ public class BallScript : MonoBehaviour
     IEnumerator CheckLevelDelayed()
     {
         //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSecondsRealtime(1);
 
         gm.CheckLevel();
     }
